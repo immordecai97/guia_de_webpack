@@ -1,0 +1,324 @@
+import './css/styles.css'; // Importa el archivo CSS
+import webpackLogo from './assets/images/webpack_logo.png'; // Importa la imagen
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.title = 'Guía básica definitiva para configurar Webpack';
+    const app = document.getElementById('app');
+    app.innerHTML = `
+    
+<main>
+    <h1>Guía Definitiva Básica para Configurar Webpack</h1>
+    <p class="autor">Por: Carlos Marquina</p>
+
+    <section>
+        <h2>¿Qué es Webpack?</h2>
+        <p>Webpack es una herramienta que nos permite preparar nuestro código para llevarlo a producción (module
+            bundler). Nos permite trabajar con:</p>
+        <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>Archivos estáticos</li>
+            <li>Imágenes</li>
+            <li>Fuentes</li>
+        </ul>
+        <p>Además, ofrece un modo de desarrollo para hacer pruebas. Desde su creación en 2012, ha sido adoptado por
+            empresas como Twitter, Instagram y PayPal.</p>
+    </section>
+
+    <section>
+        <h3>Funcionalidades de Webpack:</h3>
+        <ul>
+            <li>Gestionar dependencias</li>
+            <li>Ejecutar tareas</li>
+            <li>Conversión de archivos</li>
+            <li>Trabajar en módulos (AMD, Common JS, ES15)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Conceptos Básicos</h2>
+        <h3>Loader</h3>
+        <p>Permite hacer un bundle de cualquier recurso estático más allá de JavaScript.</p>
+
+        <h3>Plugins</h3>
+        <p>Extienden recursos para añadir configuraciones y particularidades de recursos externos.</p>
+
+        <h3>Apuntes:</h3>
+        <ul>
+            <li>Webpack construye un gráfico de dependencias que mapea cada módulo para convertirlo en uno o más
+                módulos.</li>
+            <li>Desde Webpack 4, no es obligatorio tener un archivo de configuración, pero sí un punto de entrada y
+                salida.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Modos de Webpack:</h2>
+        <ul>
+            <li>Desarrollo</li>
+            <li>Producción</li>
+            <li>Performance</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Pasos para Configurar Webpack:</h2>
+        <ol>
+            <li>Crear directorio/carpeta del proyecto.</li>
+            <li>Iniciar Git: <code>git init</code></li>
+            <li>Iniciar NPM: <code>npm init -y</code></li>
+            <li>Crear estructura de carpetas del proyecto empezando por <code>src</code>.</li>
+            <li>Dentro de <code>src</code>, crear <code>index.js</code> y agregar código de prueba:</li>
+            <pre><code>const saludo = 'Hola mundo';
+console.log(saludo);</code></pre>
+            <li>Instalar Webpack: <code>npm install webpack webpack-cli -D</code></li>
+            <li>Ejecutar Webpack: <code>npx webpack</code></li>
+            <li>Crear archivo de configuración <code>webpack.config.js</code>:</li>
+            <pre><code>const path = require('path');
+
+module.exports = {
+entry: './src/index.js',
+output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js'
+},
+mode: 'production',
+resolve: {
+    extensions: ['.js']
+}
+}</code></pre>
+            <li>Ejecutar Webpack con configuración: <code>npx webpack --config webpack.config.js</code></li>
+            <li>Configurar <code>package.json</code> para ejecutar Webpack:</li>
+            <pre><code>"scripts": {
+"build": "webpack --config webpack.config.js"
+}</code></pre>
+            <li>Ejecutar el script: <code>npm run build</code></li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Añadir Babel:</h2>
+        <ol>
+            <li>Instalar Babel:
+                <code>npm install @babel/core @babel/preset-env babel-loader @babel/plugin-transform-runtime -D</code>
+            </li>
+            <li>Crear archivo de configuración <code>.babelrc</code>:</li>
+            <pre><code>{
+"presets": ["@babel/preset-env"],
+"plugins": ["@babel/plugin-transform-runtime"]
+}</code></pre>
+            <li>Configurar Webpack para Babel:</li>
+            <pre><code>module: {
+rules: [
+    {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader'
+        }
+    }
+]
+}</code></pre>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Trabajar con HTML:</h2>
+        <ol>
+            <li>Instalar loader y plugin de HTML: <code>npm install html-loader html-webpack-plugin -D</code></li>
+            <li>Configurar Webpack para HTML:</li>
+            <pre><code>const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+// ... configuración existente ...
+module: {
+    rules: [
+        {
+            test: /\.html$/,
+            use: ['html-loader']
+        }
+    ]
+},
+plugins: [
+    new HtmlWebpackPlugin({
+        template: './src/index.html',
+        filename: 'index.html'
+    })
+]
+}</code></pre>
+            <li>Crear <code>index.html</code>:</li>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;Webpack&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Guía básica definitiva para configurar Webpack&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Trabajar con CSS:</h2>
+        <ol>
+            <li>Instalar loader de CSS:
+                <code>npm install style-loader css-loader mini-css-extract-plugin css-minimizer-webpack-plugin -D</code>
+            </li>
+            <li>Configurar Webpack para CSS:</li>
+            <pre><code>const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
+module.exports = {
+// ... configuración existente ...
+module: {
+    rules: [
+        {
+            test: /\.css$/,
+            use: [
+                MiniCssExtractPlugin.loader,
+                'css-loader'
+            ]
+        }
+    ]
+},
+plugins: [
+    new MiniCssExtractPlugin()
+],
+optimization: {
+    minimizer: [new CssMinimizerPlugin()],
+},
+}</code></pre>
+            <li>Importar CSS en <code>index.js</code>:</li>
+            <pre><code>import './css/styles.css';</code></pre>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Trabajar con Imágenes:</h2>
+        <ol>
+            <li>Instalar plugin para mover archivos: <code>npm install copy-webpack-plugin -D</code></li>
+            <li>Configurar Webpack para mover archivos:</li>
+            <pre><code>const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+// ... configuración existente ...
+plugins: [
+    new CopyWebpackPlugin({
+        patterns: [
+            {
+                from: path.resolve(__dirname, 'src', 'assets/images'),
+                to: 'assets/images'
+            }
+        ]
+    })
+]
+}</code></pre>
+            <li>Crear <code>assets/images</code> y añadir imágenes.</li>
+            <li>Instalar loader de archivos: <code>npm install file-loader -D</code></li>
+            <li>Configurar Webpack para imágenes:</li>
+            <pre><code>module.exports = {
+// ... configuración existente ...
+module: {
+    rules: [
+        {
+            test: /\.(png|svg|jpg|jpeg|gif)$/,
+            use: [
+                {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'assets/images/[name].[hash].[ext]'
+                    }
+                }
+            ]
+        }
+    ]
+}
+}</code></pre>
+            <li>Importar imágenes en <code>index.js</code>:</li>
+            <pre><code>import webpackLogo from './assets/images/webpack_logo.png';
+
+document.addEventListener('DOMContentLoaded', () => {
+document.title = 'Guía básica definitiva para configurar Webpack';
+const app = document.getElementById('app');
+app.innerHTML = \`
+<h1>Contenido de la página...</h1>
+<p>La imagen de Webpack que ves más abajo es la variable que ves en el "src" la etiqueta imagen de abajo.</p>
+\&lt img src="\${webpackLogo}" /&gt;
+<img src="${webpackLogo}" />
+\`;
+});</code></pre>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Optimización: Hashes, Compresión y Minificación</h2>
+        <ol>
+            <li>Instalar plugins:
+                <code>npm install clean-webpack-plugin terser-webpack-plugin compression-webpack-plugin -D</code></li>
+            <li>Configurar Webpack para optimización:</li>
+            <pre><code>const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
+module.exports = {
+// ... configuración existente ...
+optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+},
+plugins: [
+    new CleanWebpackPlugin(),
+    new CompressionPlugin({
+        algorithm: 'gzip',
+    }),
+],
+};</code></pre>
+            <li>Configurar Webpack para usar hashes:</li>
+            <pre><code>module.exports = {
+// ... configuración existente ...
+output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
+},
+};</code></pre>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Configurar Servidor de Webpack</h2>
+        <ol>
+            <li>Crear copia de <code>webpack.config.js</code> como <code>webpack.config.dev.js</code> y cambiar el modo
+                a 'development'.</li>
+            <li>Instalar <code>webpack-dev-server</code>: <code>npm install webpack-dev-server -D</code></li>
+            <li>Configurar <code>webpack.config.dev.js</code>:</li>
+            <pre><code>module.exports = {
+// ... configuración existente ...
+devServer: {
+    static: path.join(__dirname, 'dist'),
+    historyApiFallback: true,
+    compress: true,
+    port: 3006,
+    open: true
+}
+};</code></pre>
+            <li>Configurar <code>package.json</code>:</li>
+            <pre><code>"scripts": {
+"dev": "webpack --config webpack.config.dev.js",
+"start": "webpack serve --config webpack.config.dev.js"
+}</code></pre>
+            <li>Ejecutar: <code>npm run start</code></li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Conclusión</h2>
+        <p>Con esto hemos terminado la configuración básica y optimización de Webpack para un proyecto moderno.</p>
+    </section>
+</main>
+    `;
+});

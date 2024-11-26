@@ -1,0 +1,432 @@
+Guía definitiva básica para configurar Webpack
+
+¿Qué es Webpack?
+Ideas/conceptos claves
+Module bundlers son herramientas de frontend que nos permiten usar archivos con módulos JavaScript, entre otras características y convertirlos a un JavaScript que el navegador pueda entender.
+
+Apuntes:
+Webpack es una herramienta que nos permite preparar nuestro código para llevarlo a producción (module bundler)
+Webpack nos permite trabajar con
+- HTML
+- CSS
+- JavaScript
+- Archivos estáticos
+- Imágenes
+- Fuentes
+
+También nos permite tener un modo en desarrollo para nuestros proyectos para hacer pruebas.
+Nació en el 2012, desde ese entonces varias empresas lo usan como lo son:
+- Twitter
+- Instagram
+- PayPal
+
+También nos permite:
+- Gestionar dependencias
+- Ejecutar tareas
+- Conversión de archivos
+
+Nos permite trabajar en módulos.
+Permitiéndonos tener un código separado en desarrollo, pero en producción en una fuente
+Webpack permite tener módulos de JS en formato:
+- AMD
+- Common JS
+- ES15
+
+RESUMEN: Webpack es un module bundler que nos permite trabajar con una variedad de tecnologías web empezando desde HTML y terminando con JS. Además de tener soporte para archivos estáticos
+
+Conceptos básicos
+Ideas/conceptos claves
+Webpack es un paquete de módulos estáticos para aplicaciones de JS modernas
+
+Loader Te permite hacer un bundle de cualquier recurso estático más allá de JavaScript
+
+Plugins Extienden recursos para añadir configuraciones y particularidades de recursos externos
+
+Apuntes:
+Webpack construye un gráfico de dependencias que mapea cada módulo para convertirlo en uno o más módulos.
+
+Desde webpack 4 ya no dependemos de tener un archivo de configuración, pero sí debemos tener un punto de entrada.
+
+También tendremos que tener un punto de salida.
+En este punto se creará nuestro proyecto una vez esté preparado
+Normalmente es la carpeta dist ⇒ Distribution
+
+También contamos con diferentes modos:
+- Modo de desarrollo
+- Modo de producción
+- Modos de performance
+- - Donde tú añades:
+- - - Configuraciones de minificación
+- - - Donde se va a enviar
+- - - Carpeta de destino
+
+Modos de desarrollo local donde puedes:
+- Crear puertos específicos para tu proyecto
+- Ver cambios en tiempo real
+
+Dispone de loader y plugins permitiéndonos preparar particularidades de nuestro proyecto
+
+Pasos a seguir:
+- Crear directorio/carpeta del proyecto
+- Iniciar Git --> git init
+- Iniciar NPM --> npm init -y
+- Crear estructura de carpetas del proyecto empezando por src
+- Dentro de src crear index.js --> este archivo será nuestro punto de entrada y se encarga de importar los demás archivos que necesitemos para nuestro proyecto
+- Agreguemos código dentro de index.js para probar que todo está funcionando --> const saludo = 'Hola mundo'; console.log(saludo);
+- Instalar webpack --> npm install webpack webpack-cli -D
+- Ejecutar webpack para que lea nuestro proyecto (Es como activarlo) --> npx webpack
+- Debería crear una carpeta dist con un archivo main.js con el código JavaScript optimizado. (Este archivo es el que se encarga de tener todo nuestro proyecto listo para producción) por ejemplo: --> console.log('Hola mundo'); (Borró la variable saludo ya que era innecesaria)
+- Configuración de webpack: crear un archivo --> webpack.config.js
+- Dentro de webpack.config.js añadir la configuración de webpack --> 
+```javascript
+const path = require('path');
+
+module.exports = {
+    entry: './src/index.js', // Punto de entrada de la aplicación. (documento inicial de la aplicación)
+    output: { // Configuración de la salida de los archivos generados
+        path: path.resolve(__dirname, 'dist'), // Directorio de salida de los archivos generados
+        filename: 'main.js' // Nombre del archivo generado en el directorio de salida. (dist)
+    },
+    mode: 'production', // Modo de ejecución de Webpack. También puede ser 'development'
+    resolve:{ // Configuración de las extensiones de los archivos que se van a utilizar en el proyecto
+        extensions: ['.js'] // Extensiones que se van a utilizar en el proyecto
+    }
+}
+```	
+- - path: Es un módulo de Node.js que nos permite trabajar con rutas de archivos y directorios
+- - entry: Es la propiedad de configuración de webpack que nos permite definir el punto de entrada de la aplicación
+- - output: Es la propiedad de configuración de webpack que nos permite definir la salida de los archivos generados
+- - mode: Es la propiedad de configuración de webpack que nos permite definir el modo de ejecución de webpack
+- - resolve: Es la propiedad de configuración de webpack que nos permite definir las extensiones de los archivos que se van a utilizar en el proyecto
+- - extensions: Es una propiedad de resolve que nos permite definir las extensiones de los archivos que se van a utilizar en el proyecto
+- - .js: Es una extensión de archivo que se va a utilizar en el proyecto
+
+- Ejecutar webpack para que lea/compile nuestro proyecto (Ahora con la configuración que hicimos) --> npx webpack --config webpack.config.js
+- Debería crear una carpeta dist con un archivo main.js con el código JavaScript optimizado. 
+- Configuramos el archivo package.json para que ejecute webpack con un script --> "build": "webpack --config webpack.config.js"
+- Ahora podemos ejecutar el script creado con --> npm run build
+****
+IMPORTANTE:
+Vamos a agregar Babel a nuestro proyecto para que pueda leer archivos JS modernos y también a partir de ahora tenemos que configurar webpack para que pueda leer archivos que no sean JS. Para ello necesitamos instalar loaders y plugins.
+****
+Definamos algunas cosas primero:
+> Babel: Es un compilador de JavaScript que nos permite transformar nuestro código JS moderno a un código JS que cualquier navegador pueda entender.
+> Loaders: Son módulos que nos permiten trabajar con diferentes tipos de archivos en nuestro proyecto. Loader traducido al español significa "cargador". Por lo tanto, los loaders se encargan de "cargar" los archivos que no son JS para que webpack pueda entenderlos. Por ejemplo: archivos CSS, imágenes, fuentes, etc.
+
+> Plugins: Son módulos que nos permiten extender las funcionalidades de webpack. Plugins traducido al español significa "complementos". Por lo tanto, los plugins se encargan de "complementar" las funcionalidades de webpack. Por ejemplo: minificar el código, trabajar con variables de entorno, etc.
+
+Continuemos con los pasos:
+- Instalar Babel --> npm install @babel/core @babel/preset-env babel-loader @babel/plugin-transform-runtime -D
+- - @babel/core: Es el compilador de Babel
+- - @babel/preset-env: Es un preset de Babel que nos permite transformar nuestro código JS moderno a un código JS que cualquier navegador pueda entender
+- - babel-loader: Es un loader de Babel que nos permite trabajar con archivos JS en webpack
+- - @babel/plugin-transform-runtime: Es un plugin de Babel que nos permite trabajar con código asíncrono en nuestro proyecto
+- Crear un archivo de configuración de Babel --> .babelrc
+- - .babelrc --> Es un archivo de configuración de Babel que nos permite configurar Babel para que pueda leer archivos JS modernos
+- Dentro de .babelrc añadir la configuración de Babel -->
+```json
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        "@babel/plugin-transform-runtime"
+    ]
+}
+```
+- - presets: Es un array de presets de Babel que nos permite transformar nuestro código JS moderno a un código JS que cualquier navegador pueda entender
+- - plugins: Es un array de plugins de Babel que nos permite trabajar con código asíncrono en nuestro proyecto
+- Configurar webpack para que pueda leer archivos JS modernos con Babel. Para ello necesitamos añadir lo siguiente en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.m?js$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader'
+            }
+        }
+    ]
+}
+```
+- - module: Es un objeto de configuración de webpack que nos permite trabajar con diferentes tipos de archivos en nuestro proyecto
+- - rules: Es un array de objetos de configuración de webpack que nos permite trabajar con diferentes tipos de archivos en nuestro proyecto
+- - test: Es una expresión regular que nos permite identificar los archivos que vamos a transformar con Babel
+- - exclude: Es una expresión regular que nos permite excluir los archivos que no vamos a transformar con Babel
+- - use: Es un objeto de configuración de webpack que nos permite trabajar con loaders en nuestro proyecto
+- - loader: Es una propiedad de use que nos permite definir el loader que vamos a utilizar en nuestro proyecto
+- Ejecutar webpack para que lea/compile nuestro proyecto. --> npm run build
+
+****
+IMPORTANTE: Ahora vamos a trabajar con archivos HTML. Para ello necesitamos instalar un loader de HTML.
+****
+Continuemos con los pasos:
+- Instalar un loader y plugin de HTML --> npm install html-loader html-webpack-plugin -D
+- - html-loader: Es un loader de HTML que nos permite trabajar con archivos HTML en webpack
+- - html-webpack-plugin: Es un plugin de HTML que nos permite extender las funcionalidades de webpack para trabajar con archivos HTML
+- Configurar webpack para que pueda leer archivos HTML. Para ello necesitamos añadir lo siguiente en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    // ... configuración existente ...
+    module: {
+        rules: [
+            // ... otras reglas ...
+            {
+                test: /\.html$/,
+                use: [
+                    {
+                        loader: 'html-loader'
+                    }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            filename: 'index.html'
+        })
+    ]
+}
+```
+- Crear un directorio/carpeta por fuera de src llamado public y dentro de public crear un archivo index.html
+- Dentro de index.html añadir el siguiente código -->
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpack</title>
+</head>
+<body>
+   <h1>Guía básica definitiva para configurar Webpack</h1>
+</body>
+</html>
+```
+- Ejecutar webpack para que lea/compile nuestro proyecto. --> npm run build
+- Debería crear una carpeta dist con un archivo index.html con el código HTML optimizado.
+
+****
+IMPORTANTE: Ahora vamos a trabajar con archivos CSS. Para ello necesitamos instalar un loader de CSS.
+****
+Continuemos con los pasos:
+- Instalar un loader de CSS --> npm install style-loader css-loader mini-css-extract-plugin css-minimizer-webpack-plugin -D
+- - style-loader: Es un loader de CSS que nos permite trabajar con archivos CSS en webpack
+- - css-loader: Es un loader de CSS que nos permite trabajar con archivos CSS en webpack
+- - mini-css-extract-plugin: Es un plugin de CSS que nos permite extender las funcionalidades de webpack para trabajar con archivos CSS y extraerlos a un solo archivo CSS y así mejorar el rendimiento de la aplicación con CSS más optimizado.
+- - css-minimizer-webpack-plugin: Es un plugin que nos permite minificar y optimizar el código CSS.
+- Configurar webpack para que pueda leer archivos CSS. Para ello necesitamos añadir lo siguiente en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
+module.exports = {
+    // ... configuración existente ...
+    module: {
+        rules: [
+            // ... otras reglas ...
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ]
+            }
+        ]
+    },
+    plugins: [
+        // ... otros plugins ...
+        new MiniCssExtractPlugin()
+    ],
+    optimization: {
+        minimizer: [
+            // ... otros minimizers ...
+            new CssMinimizerPlugin(),
+        ],
+    },
+}
+```
+- Importar el archivo CSS en el archivo JS (src/index.js) que se encargará de integrar todos los archivos CSS a tu proyecto. --> import './css/styles.css';
+
+****
+IMPORTANTE: Ahora vamos a trabajar con archivos de imágenes. Para ello necesitamos instalar un loader de imágenes.
+Pero antes tenemos que configurar el sistema de mover archivos a la carpeta dist.
+Para eso vamos a utilizar un plugin de webpack llamado copy-webpack-plugin
+****
+Continuemos con los pasos:
+- Instalar un plugin de webpack para mover archivos a la carpeta dist --> npm install copy-webpack-plugin -D
+- - copy-webpack-plugin: Es un plugin de webpack que nos permite extender las funcionalidades de webpack para mover archivos a la carpeta dist
+- Configurar webpack para que pueda mover archivos a la carpeta dist. Para ello necesitamos añadir lo siguiente en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+    // ... configuración existente ...
+    plugins: [
+        // ... otros plugins ...
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src', 'assets/images'),
+                    to: 'assets/images'
+                }
+            ]
+        })
+    ]
+}
+```
+- Crear un directorio/carpeta por fuera de src llamado assets y dentro de assets crear un directorio/carpeta llamado images
+- Dentro de images añadir una imagen o imágenes cualquiera (las que necesites para tu proyecto)
+- Probemos que todo está funcionando correctamente. -> npm run build
+- Ahora, debería existir en la carpeta dist una carpeta assets con las imágenes que copiamos.
+- Ya que logramos mover las imágenes a la carpeta dist, ahora vamos a trabajar con un loader de imágenes.
+
+Continuemos con los pasos:
+- Instalamos el loader de archivos en general -->  npm install file-loader -D
+- Luego vamos a configurar en las reglas este loader para las imágenes de la siguiente manera -->
+```javascript
+module.exports = {
+    // ... configuración existente ...
+    module: {
+        rules: [
+            // ... otras reglas ...
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/, // Expresión regular (Regex) para identificar los archivos de imágenes que se van a transformar
+                use: [ // Configuración de los loaders que se van a utilizar
+                    {
+                        loader: 'file-loader', // Loader que se va a utilizar -> File
+                        options: { // Opciones del loader
+                            name: 'assets/images/[name].[hash].[ext]' // Nombre del archivo de salida. cuando usas [name] se refiere al nombre original del archivo. Nota: [algo] son placeholders que se reemplazan por el valor correspondiente del archivo ejemplo -> [name], [ext], [hash] etc. 
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+}
+```
+****
+NOTA: Para que webpack pueda empaquetar las imágenes a /dist tienen que ser importadas en un archivo JS.
+Lo que quiero decir es que en el caso de que quieras usar una etiqueta <img src="URL/de/la/imagen"> en un archivo HTML, no te va a funcionar webpack para empaquetar y te dará error.
+
+Observación: en el caso de este proyecto en el archivo index.js coloqué lo siguiente: -->
+```javascript
+import './css/styles.css'; // Importa el archivo CSS
+import webpackLogo from './assets/images/webpack_logo.png'; // Importa la imagen
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.title = 'Guía básica definitiva para configurar Webpack';
+    const app = document.getElementById('app');
+    app.innerHTML = `
+    <h1>Guía básica definitiva para configurar Webpack</h1>
+    <img src="${webpackLogo}" alt="Webpack logo">
+    `
+});
+```
+
+Para que pueda maquetar y renderizar esta guía
+****
+
+
+****
+IMPORTANTE: Optimización: hashes, compresión y minificación de archivos
+
+Aclaremos esto:
+¿Por qué es importante usar Hashes en nuestros archivos?
+- Los recursos que se guardan en memoria cache suceden cuando el navegador entra a un sitio por primera vez detecta los recursos y los guarda. Por ello la siguiente vez será mucho más rápido porque estarán en memoria
+- - La desventaja está cuando sacamos una nueva versión, porque tendrán un mismo nombre evitando que se descarguen los nuevos cambios, por lo tanto, el usuario no recibirá los nuevos cambios
+- - Para que no haya conflictos con la cache una vez que tengamos nuestro proyecto en producción es importante darles un hash para cada nueva versión
+****
+Continuemos con los pasos:
+- Instalemos los siguientes recursos -> npm install clean-webpack-plugin terser-webpack-plugin compression-webpack-plugin -D
+- - clean-webpack-plugin: Es un plugin que nos permite limpiar la carpeta dist antes de cada build, asegurando que solo los archivos necesarios estén presentes.
+- - terser-webpack-plugin: Es un plugin que nos permite minificar y optimizar el código JavaScript.
+- - compression-webpack-plugin: Es un plugin que nos permite comprimir los archivos generados usando algoritmos como gzip o brotli.
+
+Configurar webpack para usar estos plugins. Para ello necesitamos añadir lo siguiente en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
+module.exports = {
+    // ... configuración existente ...
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin()],
+    },
+    plugins: [
+        // ... otros plugins ...
+        new CleanWebpackPlugin(),
+        new CompressionPlugin({
+            algorithm: 'gzip',
+        }),
+    ],
+};
+```
+- Ejecutar webpack para que lea/compile nuestro proyecto. --> npm run build
+- Debería crear una carpeta dist con los archivos optimizados y comprimidos.
+
+**** 
+IMPORTANTE: Ahora vamos a trabajar con hashes en los nombres de los archivos para evitar problemas de caché.
+**** 
+Continuemos con los pasos:
+- Configurar webpack para usar hashes en los nombres de los archivos. Para ello necesitamos modificar la configuración de output en el archivo de configuración de webpack (webpack.config.js) -->
+```javascript
+module.exports = {
+    // ... configuración existente ...
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[contenthash].js', // Usar [contenthash] para generar un hash basado en el contenido del archivo
+    },
+};
+```
+- Y así sucesivamente le agregar el [contenthash] para los archivos que necesites hashear.
+- Ejecutar webpack para que lea/compile nuestro proyecto. --> npm run build
+- Debería crear una carpeta dist con los archivos JavaScript con nombres que incluyen hashes.
+
+****
+IMPORTANTE: Vamos a configurar ahora un servidor de Webpack
+La idea es que al ser ejecutado este servidor de webpack, ayuda a no estar ejecutando "npm run build" cada vez que hagas un cambio en tu proyecto, por lo tanto escucha cada cambio y se empaqueta automaticamente.
+En pocas palabras queremos ver los cambios en tiempo real mientras estamos editando
+
+Aclaremos algo: en toda la configuración que llevamos anteriormente, es ua configuración para empaquetar el proyecto a producción, es decir empacar ese proyecto para ser entregador como producto final o aplicación temrinada que posteriormente deberia ser alojada en un servicio de hosting.
+En este caso como vamos a estar editando (desarollando) nuestro codigo necesitaremos ver los cambios que realizamos en tiempo real, valga la redundancia, esto nos ayuda a ahorrar mucho tiempo y no tenemos que ejecutar encada cambio un npm run build, sino que ya ese empaquetado se haria automaticamente. Para eso primero debemos configurar nuestro archivo webpack.config.js con el modo desarrollador.
+****
+Continuemos con los pasos:
+- Has una copia del archivo webpack.config.js y a esa copia cambiale el nombre a --> webpack.config.dev.js
+- En el archivo webpack.config.dev.js cambia el modo a 'development'
+- Instalemos webpack-dev-server --> npm install webpack-dev-server -D
+- Configuremos webpack.config.dev.js con lo siguiente -->
+```javascript
+module.exports = {
+    // ... configuración existente ...
+    devServer: { // Configuración del servidor de desarrollo
+        static: path.join(__dirname, 'dist'), // Directorio base del servidor de desarrollo
+        historyApiFallback: true, // Habilita el enrutamiento de HTML5 y tener una historia de lo que sucede en el navegador
+        compress: true, // Compresión de los archivos
+        port: 3006, // Puerto del servidor de desarrollo
+        open: true // Apertura automática del navegador
+    }
+};
+```
+- Ahora nos dirigimos al package.json y agregamos la siguiente configuración en el "script" -->
+```json
+ "scripts": {
+    // ... otros scripts como test, build, etc. ...
+    "dev": "webpack --config webpack.config.dev.js",
+    "start": "webpack serve --config webpack.config.dev.js"
+  },
+```
+- Ejecutamos -> npm run start
+- Ya deberías tener un puerto para verlo en un navegador y el servidor de webpack estaria escuchando los cambios que hagas en tu código en tiempo real
+
+
+**** 
+NOTA: Con esto hemos terminado la configuración básica y optimización de webpack para un proyecto moderno.
+**** 
